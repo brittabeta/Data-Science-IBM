@@ -1,6 +1,6 @@
 ##1 Dash basics: HTML and core components ##
-python3 -m pip install pandas dash
-pip3 install httpx==0.20 dash plotly
+python3 -m pip install pandas dash # in terminal
+pip3 install httpx==0.20 dash plotly # in terminal
 #Create a new python script, by clicking on the menu bar and selecting File->New File - file name as dash_basics.py
 #Open a new terminal, Terminal->New Terminal
 # Import required packages
@@ -53,4 +53,103 @@ python3 dash_basics.py
 ## Click on file --> save file.Then go to terminal and Run the command python3 dash_basics.py to open the updated file again and relaunch the application by entering the port number.The updated dashboard title will be seen.
 ## Press ctrl+c inside the terminal to stop the dash application.
 
-##2
+##2 Add interactivity: user input and callbacks
+python3 -m pip install pandas dash  # in terminal
+pip3 install httpx==0.20 dash plotly  # in terminal
+#Create a new python script, by clicking on the menu bar and selecting File->New File - file name as dash_interactivity.py
+#Open a new terminal, by clicking on the menu bar and selecting Terminal->New Terminal
+# Import required libraries
+import pandas as pd
+import plotly.graph_objects as go
+import dash
+import dash_html_components as html
+import dash_core_components as dcc
+from dash.dependencies import Input, Output
+
+# Read the airline data into pandas dataframe
+airline_data =  pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DV0101EN-SkillsNetwork/Data%20Files/airline_data.csv', 
+                            encoding = "ISO-8859-1",
+                            dtype={'Div1Airport': str, 'Div1TailNum': str, 
+                                   'Div2Airport': str, 'Div2TailNum': str})
+# Create a dash application
+app = dash.Dash(__name__)
+
+# Get the layout of the application and adjust it.
+# Create an outer division using html.Div and add title to the dashboard using html.H1 component
+# Add a html.Div and core input text component
+# Finally, add graph component.
+app.layout = html.Div(children=[html.H1(),
+                                html.Div(["Input Year", dcc.Input(),], 
+                                style={}),
+                                html.Br(),
+                                html.Br(),
+                                html.Div(),
+                                ])
+# Update layout components
+##Application title: Heading reference: Plotly H1 HTML Component, Title as Airline Performance Dashboard, Use style parameter and make the title center aligned, with color code #503D36, and font-size as 40. Check More about HTML section here.
+##Input component: Update dcc.Input component id as input-year, default value as 2010, and type as number. Use style parameter and assign height of the input box to be 50px and font-size to be 35., Use style parameter and assign font-size as 40 for the whole division.
+##Output component: Add dcc.Graph() component to the second division. Update dcc.Graph component id as line-plot.
+app.layout = html.Div(children=[html.H1('Airline Performance Dashboard',
+                                style={'textAlign':'center', 'color':'#503D36', 'font-size'=40}),
+                                html.Div(["Input Year: ", dcc.Input(id= 'input-year', value= '2010',type='number', style={'height':'50px','font-size':35}),],
+                                style={'font-size':40}),
+                                html.Br(),
+                                html.Br(),
+                                html.Div(dcc.Graph(id='line-plot')),
+                                ])
+# Add the application callback function: The core idea of this application is to get year as user input and update the dashboard in real-time. We will be using callback function for the same.
+## Define the callback decorator, Define the callback function that uses the input provided to perform the computation
+## Create graph and return it as an output
+## Run the application
+## code to the dash_interactivity.py script and review the structure            
+# add callback decorator
+@app.callback(Output(),
+               Input())
+
+# Add computation to callback function and return graph
+def get_graph(entered_year):
+    # Select data based on the entered year
+    df =  airline_data[airline_data['Year']==int(entered_year)]
+
+    # Group the data by Month and compute average over arrival delay time.
+    line_data = df.groupby('Month')['ArrDelay'].mean().reset_index()
+
+    # 
+    fig = go.Figure(data=)
+    fig.update_layout()
+    return fig
+
+# Run the app
+if __name__ == '__main__':
+    app.run_server()
+    
+# callback decorator
+##Update output component id parameter with the id provided in the dcc.Graph() component and component property as figure.
+##Update input component id parameter with the id provided in the dcc.Input() component and component property as value.
+@app.callback(Output(component_id='line-plot', component_property='figure'),
+               Input(component_id='input-year', component_property='value'))
+## update go.Figure data, update go.Scatter x y mode and marker, update fig.update_layout titles
+def get_graph(entered_year):
+    # Select data based on the entered year
+    df =  airline_data[airline_data['Year']==int(entered_year)]
+
+    # Group the data by Month and compute average over arrival delay time.
+    line_data = df.groupby('Month')['ArrDelay'].mean().reset_index()
+
+    # 
+    fig = go.Figure(data=go.Scatter(x=line_data['Month'], y=line_data['ArrDelay'],mode='lines', marker=dict(color='green')))
+    fig.update_layout(title='Month vs Average Flight Delay Time',xaxis_title='Month',yaxis_title='ArrDelay')
+    return fig
+#Run the application
+## in terminal
+pip3 install pandas dash
+python3 dash_interactivity.py
+# Change the title to the dashboard from "Airline Performance Dashboard" to "Airline Dash Interactivity" using HTML H1 component and font-size as 50.
+## html.H1('Airline Dash Interactivity',style={'textAlign': 'center', 'color': '#503D36', 'font-size': 50}),
+# Update dcc.Input component id as input-year, default value as 2015, and type as number. Use style parameter and assign height of the input box to be 40px and font-size to be 40. Use style parameter and assign font-size as 35 for the whole division.
+## html.Div(["Input Year: ", dcc.Input(id='input-year', value='2015',type='number', style={'height':40px', 'font-size': 40}),],style={'font-size': 35}),
+
+# save
+# in terminal python3 dash_interactivity.py
+# launch
+# to stop ctrl C
