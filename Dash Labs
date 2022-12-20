@@ -269,72 +269,11 @@ python3 flight_details.py
 
 ##4 Final Practice##
 
+#dash_layout.py
 #in command terminal
 python3 -m pip install pandas dash
 pip3 install httpx==0.20 dash plotly
-
-#open new terminal
-#create a new script File New File dash_layout.py
-
-#in script
-# Import required packages
-import pandas as pd
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-import plotly.express as px
-from dash.dependencies import Input, Output
-
-# Add Dataframe
-
-# Add a bar graph figure
-
-app = dash.Dash()
-app.layout = html.Div(children=[
-    html.H1(
-        children='Dashboard',
-        style={
-            'textAlign': 'center'
-        }
-    )
-
-    # Create dropdown
-
-    # Bar graph
-])
-
-# Run Application
-if __name__ == '__main__':
-    app.run_server()
-
-#generate a drop down: 
-##call Dropdown off dash_core_components 
-##pass the options as a list of dictionaries
-##set the default value using the value attribute 
-##pass in the default option
-
-# u before special characters
-, dcc.Dropdown(options=[
-            {'label': 'New York City', 'value': 'NYC'},
-            {'label': u'Montréal', 'value': 'MTL'},
-            {'label': 'San Francisco', 'value': 'SF'}
-        ],
-        value='NYC' # Providing a vallue to dropdown
-    )
-#  Add Dataframe in the skeleton
-# Add Dataframe
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "NYC", "MTL", "NYC"]
-})
-
-#create bargraph: plotly.express module px, built-in to plotly can create entire figure at once, 
-##use the Graph class from dash_core_components
-##add bar graph figure
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
-##bar graph to skeleton
-dcc.Graph(id='example-graph-2',figure=fig)
+python3 dash_layout.py
 
 #Complete Code dash_layout.py
 # Import required packages
@@ -389,12 +328,16 @@ app.layout = html.Div(children=[
 if __name__ == '__main__':
     app.run_server()
 
+
 ##Final practice B: Dash Auto##
 #terminal
+    python3 -m pip install pandas dash
+    pip3 install httpx==0.20 dash plotly
+    wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DA0101EN-SkillsNetwork/labs/Data%20files/automobileEDA.csv
+    python3 Dash_Auto.py
 
 #script
-
-#complete code
+##complete code
 import pandas as pd
 import dash
 import dash_html_components as html
@@ -484,6 +427,4 @@ def display_selected_drive_charts(value):
 
 if __name__ == '__main__':
     app.run_server()
-
-
 
